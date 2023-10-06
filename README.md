@@ -21,6 +21,22 @@ npm run update-types
 - [Tailwind](https://tailwindcss.com/docs/guides/sveltekit)
 - [DaisyUI](https://daisyui.com/docs/install/)
 
+## Pull database schema
+
+This requires docker.
+
+```
+npx supabase link --project-ref <project-ref>
+npx supabase pull
+```
+
+Supabase only allows 2 login attempts before they block an IP for 30 minutes. To unblock immediately run:
+
+```
+npx supabase network-bans get --project-ref <project-ref> --experimental
+npx supabase network-bans remove --db-unban-ip <ip-address> --project-ref <project-ref> --experimental
+```
+
 ## Development builds
 
 ```bash
