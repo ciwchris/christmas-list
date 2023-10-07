@@ -1,3 +1,4 @@
+# https://kit.svelte.dev/docs/adapter-static#github-pages
 name: Deploy
 
 on:
@@ -20,21 +21,27 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: npm
       - name: Install dependencies
         run: npm ci
       - name: 'Create env file'
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
       - name: Build application
-        run: npm run build
+        env:
+          BASE_PATH: '/christmas-list'
+        run: |
+          npm run build
+          touch build/.nojekyll
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: './dist/'
+          path: 'build/'
 
   deploy:
     needs: build
+    runs-on: ubuntu-latest
 
     # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
@@ -46,7 +53,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
 
-    runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v2
