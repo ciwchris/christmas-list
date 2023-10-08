@@ -11,6 +11,7 @@
 	export let userId: string;
 
 	let hasLoaded = false;
+	let listUserId = userId;
 	let isSaving = false;
 	let hasErrorSaving = false;
 	let hasErrorFetching = false;
@@ -32,6 +33,7 @@
 			listItems.items.forEach((item) =>
 				currentItemsMap.set(item.id, item?.has_been_purchased ?? false)
 			);
+			listUserId = listItems.items[0].user_id;
 			hasErrorFetching = false;
 		}
 	};
@@ -106,38 +108,54 @@
 {/if}
 
 {#if hasLoaded}
-	<form on:submit|preventDefault={handleSaving}>
-		<div class="ml-2 mr-2">
-			<div class="mt-5 space-y-10">
-				<fieldset>
-					{#each listItems.items as { item, has_been_purchased, purchased_by_user_id, purchased_at }, index}
-						<div class="mt-6 space-y-6">
-							<div class="relative flex gap-x-3">
-								<div class="flex h-6 items-center">
-									<input
-										type="checkbox"
-										id="todo{index}"
-										name="todos"
-										class="checkbox checkbox-primary"
-										bind:checked={has_been_purchased}
-										disabled={purchased_by_user_id != null && purchased_by_user_id != userId}
-									/>
-								</div>
-								<div class="text-sm leading-6">
-									<label for="todo{index}" class="font-medium text-gray-900">{item}</label>
-								</div>
-							</div>
-						</div>
-					{/each}
-				</fieldset>
-			</div>
-			<div class="mt-10 grid grid-cols-1 sm:grid-cols-6">
-				<button type="submit" disabled={isSaving} class="sm:col-span-1 btn btn-primary">
-					<span>{isSaving ? 'Saving' : 'Save purchases'}</span>
-				</button>
-			</div>
+	{#if listUserId != userId}
+		<div class="ml-2 mt-8">
+                 <table class="table">
+                     <tbody>
+                        {#each listItems.items as { item, inserted_at }}
+                         <tr>
+                             <td class="min-w-max">{item}</td>
+                             <td class="ml-3 italic">{(new Date(Date.parse(inserted_at))).toLocaleDateString()}</td>
+                         </tr>
+                        {/each}
+                    </tbody>
+                </table>
 		</div>
-	</form>
+	{:else}
+		<form on:submit|preventDefault={handleSaving}>
+			<div class="ml-2 mt-8">
+                 <table class="table">
+                     <tbody>
+						{#each listItems.items as { item, has_been_purchased, purchased_by_user_id, purchased_at }, index}
+                         <tr>
+                             <td class="max-w-[.5rem]">
+										<input
+											type="checkbox"
+											id="todo{index}"
+											name="todos"
+											class="checkbox checkbox-primary mr-3"
+											bind:checked={has_been_purchased}
+											disabled={purchased_by_user_id != null && purchased_by_user_id != userId}
+										/>
+                             </td>
+                             <td class="min-w-max">{item}</td>
+                             <td class="ml-3 italic">
+                             {#if purchased_at}
+                                 <span class="ml-3">{(new Date(Date.parse(purchased_at))).toLocaleDateString()}</span>
+                             {/if}
+                             </td>
+                         </tr>
+						{/each}
+                     <tbody>
+                </table>
+				<div class="mt-10 grid grid-cols-1 sm:grid-cols-6">
+					<button type="submit" disabled={isSaving} class="sm:col-span-1 btn btn-primary">
+						<span>{isSaving ? 'Saving' : 'Save purchases'}</span>
+					</button>
+				</div>
+			</div>
+		</form>
+	{/if}
 {:else}
 	<div class="grid justify-items-center">
 		<span class="loading loading-spinner loading-sm mt-20" />
