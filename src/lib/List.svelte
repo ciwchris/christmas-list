@@ -63,7 +63,7 @@
 	};
 </script>
 
-<h1 class="text-3xl font-bold">Christmas list</h1>
+<h1 class="text-3xl font-bold ml-3">Christmas list</h1>
 
 {#if hasBeenSaved}
 	<div class="alert alert-success mt-4" transition:fade={{ delay: 250, duration: 300 }}>
@@ -109,13 +109,19 @@
 
 {#if hasLoaded}
 	{#if listUserId != userId}
-		<div class="ml-2 mt-8">
+		<div class="ml-2 mr-2 mt-8">
                  <table class="table">
+                     <thead>
+                         <tr>
+                             <th class="min-w-max"></th>
+                             <th class="ml-3">Added date</th>
+                         </tr>
+                     </thead>
                      <tbody>
                         {#each listItems.items as { item, inserted_at }}
                          <tr>
-                             <td class="min-w-max">{item}</td>
-                             <td class="ml-3 italic">{(new Date(Date.parse(inserted_at))).toLocaleDateString()}</td>
+                             <td>{item}</td>
+                             <td class="italic">{(new Date(Date.parse(inserted_at))).toLocaleDateString()}</td>
                          </tr>
                         {/each}
                     </tbody>
@@ -123,12 +129,19 @@
 		</div>
 	{:else}
 		<form on:submit|preventDefault={handleSaving}>
-			<div class="ml-2 mt-8">
+			<div class="ml-2 mr-2 mt-8">
                  <table class="table">
+                     <thead>
+                         <tr>
+                             <th class="min-w-fit"></th>
+                             <th class="min-w-max"></th>
+                             <th class="ml-3">Purchased date</th>
+                         </tr>
+                     </thead>
                      <tbody>
 						{#each listItems.items as { item, has_been_purchased, purchased_by_user_id, purchased_at }, index}
                          <tr>
-                             <td class="max-w-[.5rem]">
+                             <td class="max-w-fit">
 										<input
 											type="checkbox"
 											id="todo{index}"
@@ -148,8 +161,8 @@
 						{/each}
                      <tbody>
                 </table>
-				<div class="mt-10 grid grid-cols-1 sm:grid-cols-6">
-					<button type="submit" disabled={isSaving} class="sm:col-span-1 btn btn-primary">
+				<div class="mt-10 grid xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 grid-cols-1">
+					<button type="submit" disabled={isSaving} class="btn btn-primary">
 						<span>{isSaving ? 'Saving' : 'Save purchases'}</span>
 					</button>
 				</div>
