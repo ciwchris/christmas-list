@@ -108,7 +108,7 @@
 {/if}
 
 {#if hasLoaded}
-	{#if listUserId != userId}
+	{#if listUserId == userId}
 		<div class="ml-2 mr-2 mt-8">
                  <table class="table">
                      <thead>
@@ -118,9 +118,15 @@
                          </tr>
                      </thead>
                      <tbody>
-                        {#each listItems.items as { item, inserted_at }}
+                        {#each listItems.items as { item, inserted_at, link }}
                          <tr>
-                             <td>{item}</td>
+                             <td>
+                             {#if link}
+                                 <a class="link link-primary" href="{link}">{item}</a>
+                             {:else}
+                                 {item}
+                             {/if}
+                             </td>
                              <td class="italic">{(new Date(Date.parse(inserted_at))).toLocaleDateString()}</td>
                          </tr>
                         {/each}
@@ -151,7 +157,13 @@
 											disabled={purchased_by_user_id != null && purchased_by_user_id != userId}
 										/>
                              </td>
-                             <td class="min-w-max">{item}</td>
+                             <td class="min-w-max">
+                             {#if link}
+                                 <a class="link link-primary" href="{link}">{item}</a>
+                             {:else}
+                                 {item}
+                             {/if}
+                             </td>
                              <td class="ml-3 italic">
                              {#if purchased_at}
                                  <span class="ml-3">{(new Date(Date.parse(purchased_at))).toLocaleDateString()}</span>

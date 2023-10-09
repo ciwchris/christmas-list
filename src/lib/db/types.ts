@@ -15,6 +15,7 @@ export interface Database {
           id: number
           inserted_at: string
           item: string | null
+          link: string | null
           purchased_at: string | null
           purchased_by_user_id: string | null
           user_id: string
@@ -24,6 +25,7 @@ export interface Database {
           id?: number
           inserted_at?: string
           item?: string | null
+          link?: string | null
           purchased_at?: string | null
           purchased_by_user_id?: string | null
           user_id: string
@@ -33,6 +35,7 @@ export interface Database {
           id?: number
           inserted_at?: string
           item?: string | null
+          link?: string | null
           purchased_at?: string | null
           purchased_by_user_id?: string | null
           user_id?: string
