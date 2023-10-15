@@ -3,7 +3,11 @@ export default {
   content: [],
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
-    extend: {},
+    extend: {
+      width: {
+        '1/100': '1%'
+      }
+    },
     container: {
       center: true,
     },
