@@ -81,9 +81,37 @@
 	};
 </script>
 
-<h1 class="text-3xl font-bold ml-3">Christmas list</h1>
-
 <Modal {handleDelete} bind:showModal bind:itemTextToDelete />
+
+<div class="navbar bg-base-100">
+	<div class="navbar-start text-primary">
+		<div class="dropdown">
+			<label tabindex="0" class="btn btn-ghost btn-circle">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-5 w-5"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					><path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M4 6h16M4 12h16M4 18h7"
+					/></svg
+				>
+			</label>
+			<ul
+				tabindex="0"
+				class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+			>
+				<li><a>Items</a></li>
+				<li><a>Shoppers</a></li>
+			</ul>
+		</div>
+		<a class="btn btn-ghost normal-case text-xl">Christmas list</a>
+	</div>
+</div>
 
 {#if hasBeenSaved}
 	<div class="alert alert-success mt-4" transition:fade={{ delay: 250, duration: 300 }}>
@@ -149,7 +177,11 @@
 {/if}
 
 {#if hasLoaded}
-	{#if listUserId == userId}
+	{#if !listItems || listItems.items.length == 0}
+		<div class="mt-8 bg-gray-50 grid place-content-center min-h-[50vh] italic">
+			This list does not contain any items
+		</div>
+	{:else if listUserId == userId}
 		<div class="ml-2 mr-2 mt-8">
 			<table class="table">
 				<thead>
