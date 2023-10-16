@@ -179,7 +179,10 @@
 {#if hasLoaded}
 	{#if !listItems || listItems.items.length == 0}
 		<div class="mt-8 bg-gray-50 grid place-content-center min-h-[50vh] italic">
-			This list does not contain any items
+			Hey friend, it's time to write your Christmas list,<br />
+			Don't be shy, don't be remiss.<br />
+			Santa's coming soon, so get it done,<br />
+			And make sure he brings you all the fun!
 		</div>
 	{:else if listUserId == userId}
 		<div class="ml-2 mr-2 mt-8">
