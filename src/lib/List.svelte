@@ -3,6 +3,8 @@
 	import { db } from '$lib/db/client';
 	import type { Database } from '$lib/db/types';
 	import { onMount } from 'svelte';
+	import NewItem from './NewItem.svelte';
+	import EmptyListPrompt from './EmptyListPrompt.svelte';
 	import Modal from './ConfirmDelete.svelte';
 
 	interface Props {
@@ -39,7 +41,7 @@
 			listItems.items.forEach((item) =>
 				currentItemsMap.set(item.id, item?.has_been_purchased ?? false)
 			);
-			listUserId = listItems.items[0].user_id;
+			if (listItems.length > 0) listUserId = listItems.items[0].user_id;
 			hasErrorFetching = false;
 		}
 	};
@@ -178,12 +180,8 @@
 
 {#if hasLoaded}
 	{#if !listItems || listItems.items.length == 0}
-		<div class="mt-8 bg-gray-50 grid place-content-center min-h-[50vh] italic">
-			Hey friend, it's time to write your Christmas list,<br />
-			Don't be shy, don't be remiss.<br />
-			Santa's coming soon, so get it done,<br />
-			And make sure he brings you all the fun!
-		</div>
+		<NewItem bind:userId bind:listItems />
+		<EmptyListPrompt />
 	{:else if listUserId == userId}
 		<div class="ml-2 mr-2 mt-8">
 			<table class="table">
@@ -223,7 +221,7 @@
 							</td>
 							<td>
 								{#if link}
-									<a class="link link-primary" href={link}>{item}</a>
+									<a class="link link-primary" target="_blank" href={link}>{item}</a>
 								{:else}
 									{item}
 								{/if}
@@ -233,6 +231,8 @@
 					{/each}
 				</tbody>
 			</table>
+			<div class="divider mt-10 text-lg text-primary">Add more items</div>
+			<NewItem bind:userId bind:listItems />
 		</div>
 	{:else}
 		<form on:submit|preventDefault={handleSaving}>
@@ -260,7 +260,7 @@
 								</td>
 								<td>
 									{#if link}
-										<a class="link link-primary" href={link}>{item}</a>
+										<a class="link link-primary" target="_blank" href={link}>{item}</a>
 									{:else}
 										{item}
 									{/if}
