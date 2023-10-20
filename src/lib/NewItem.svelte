@@ -2,6 +2,8 @@
 	import { db } from '$lib/db/client';
 	import { fade } from 'svelte/transition';
 	import type { Database } from '$lib/db/types';
+	import AlertSuccess from './AlertSuccess.svelte';
+	import AlertError from './AlertError.svelte';
 
 	interface Props {
 		items: Database['public']['Tables']['items']['Row'][];
@@ -33,45 +35,11 @@
 </script>
 
 {#if hasBeenSaved}
-	<div class="alert alert-success mt-4" transition:fade={{ delay: 250, duration: 300 }}>
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			fill="none"
-			viewBox="0 0 24 24"
-			class="stroke-current shrink-0 w-6 h-6"
-			><path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-			/></svg
-		>
-		<span>Items have been saved</span>
-		<div>
-			<button class="btn btn-sm btn-primary" on:click={() => (hasBeenSaved = false)}>OK</button>
-		</div>
-	</div>
+	<AlertSuccess bind:hasBeenAcknowledged={hasBeenSaved} />
 {/if}
 
 {#if hasError}
-	<div class="alert alert-error mt-4" transition:fade={{ delay: 250, duration: 300 }}>
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			class="stroke-current shrink-0 h-6 w-6"
-			fill="none"
-			viewBox="0 0 24 24"
-			><path
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				stroke-width="2"
-				d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-			/></svg
-		>
-		<span>Could not delete item</span>
-		<div>
-			<button class="btn btn-sm btn-primary" on:click={() => (hasError = false)}>OK</button>
-		</div>
-	</div>
+	<AlertError bind:hasBeenAcknowledged={hasError} />
 {/if}
 
 <div class="mt-8 grid place-content-center">
